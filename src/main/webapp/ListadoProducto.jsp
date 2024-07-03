@@ -29,6 +29,7 @@
 <td>Precio Compra</td>
 <td>Estado</td>
 <td>Descripcion</td>
+<td colspan="2" align="center">Acciones</td>
 </tr>
 
 <%
@@ -43,6 +44,8 @@ if(listadoproducto !=null){
 		<td><%=pro.getPreciocompcl3() %></td>
 		<td><%=pro.getEstadocl3() %></td>
 		<td><%=pro.getDescripcl3() %></td>
+		<td><a href="ControladorProducto?accion=Eliminar&cod=<%=pro.getIdproductoscl3() %>">Eliminar</a></td>
+	    <td><a href="ControladorProducto?accion=Modificar&cod=<%=pro.getIdproductoscl3()%>">Actualizar</a></td>
 		</tr>
 		
 		<% 

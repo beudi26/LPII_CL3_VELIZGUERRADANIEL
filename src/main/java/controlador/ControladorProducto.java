@@ -29,35 +29,80 @@ public class ControladorProducto extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ClassProductoImp crud = new ClassProductoImp();
-		List<TblProductocl3> listarproducto = crud.ListarProducto();
-		request.setAttribute("listadoproductos", listarproducto);
-		request.getRequestDispatcher("/ListadoProducto.jsp").forward(request, response);
+		TblProductocl3 producto=new TblProductocl3();
+		ClassProductoImp crud=new ClassProductoImp();
+		
+		String accion=request.getParameter("accion");
+		if(accion!=null){
+			switch(accion){
+			case "Modificar":
+				int codigo=Integer.parseInt(request.getParameter("cod"));
+				producto.setIdproductoscl3(codigo);
+				TblProductocl3 buscarcod=crud.BuscarProducto(producto);
+				request.setAttribute("codigo",buscarcod.getIdproductoscl3());
+				request.setAttribute("nombre",buscarcod.getNombrecl3());
+				request.setAttribute("precio venta",buscarcod.getPrecioventacl3());
+				request.setAttribute("precio compra",buscarcod.getPreciocompcl3());
+				request.setAttribute("estado",buscarcod.getEstadocl3());
+				request.setAttribute("descripcion",buscarcod.getDescripcl3());
+				request.getRequestDispatcher("/FormActualizarProducto.jsp").forward(request, response);
+				break;
+			case "Eliminar":
+				int codeliminar=Integer.parseInt(request.getParameter("cod"));
+				producto.setIdproductoscl3(codeliminar);
+				crud.EliminarProducto(producto);
+				List<TblProductocl3> listado=crud.ListarProducto();
+				request.setAttribute("listadoproductos",listado);
+				request.getRequestDispatcher("/ListadoProducto.jsp").forward(request, response);
+				break;
+			
+			case "Listar":
+				List<TblProductocl3> listadoproducto=crud.ListarProducto();
+				request.setAttribute("listadoproductos",listadoproducto);
+				request.getRequestDispatcher("/ListadoProducto.jsp").forward(request, response);
+				break;
+				
+			 }  //fin del switch...
+			
+			
+		}   //fin del if...
 	}//fin del metodo do get
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String nombrecl3 = request.getParameter("nombre");
-		Double precioventacl3 = Double.parseDouble(request.getParameter("precioventa"));
-		Double preciocompracl3 = Double.parseDouble(request.getParameter("preciocompra"));
-		String estadocl3 = request.getParameter("estado");
-		String descripcl3 = request.getParameter("descrip");
+		String codigo=request.getParameter("codigo");
+		String nombre = request.getParameter("nombre");
+		Double precioventa = Double.parseDouble(request.getParameter("precioventa"));
+		Double preciocompra = Double.parseDouble(request.getParameter("preciocompra"));
+		String estado = request.getParameter("estado");
+		String descripcion = request.getParameter("descripcion");
 		
-		TblProductocl3 producto = new TblProductocl3();
-		ClassProductoImp crud = new ClassProductoImp();
+		List<TblProductocl3> listadoproducto=null;
 		
-		producto.setNombrecl3(nombrecl3);
-		producto.setPrecioventacl3(precioventacl3);
-		producto.setPreciocompcl3(preciocompracl3);
-		producto.setEstadocl3(estadocl3);
-		producto.setDescripcl3(descripcl3);
+		TblProductocl3 producto=new TblProductocl3();
+		ClassProductoImp crud=new ClassProductoImp();
+		
+		producto.setNombrecl3(nombre);
+		producto.setPrecioventacl3(precioventa);
+		producto.setPreciocompcl3(preciocompra);
+		producto.setEstadocl3(estado);
+		producto.setDescripcl3(descripcion);
+		if(codigo!=null){
+			int cod=Integer.parseInt(codigo);
+			producto.setIdproductoscl3(cod);
+			crud.ActualizarProducto(producto);
+			listadoproducto=crud.ListarProducto();
+			
+		}else{	
 		crud.RegistrarProducto(producto);
+		listadoproducto=crud.ListarProducto();
 		
-		List<TblProductocl3> listarProducto = crud.ListarProducto();
-		request.setAttribute("listadoproductos", listarProducto);
+		} //fin del else...
+		request.setAttribute("listadoproductos",listadoproducto);
 		request.getRequestDispatcher("/ListadoProducto.jsp").forward(request, response);
+		
 	}//fin del metodo do post
 
 }//fin del servlet

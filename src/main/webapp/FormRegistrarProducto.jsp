@@ -33,7 +33,7 @@
 
 <tr>
 <td>Descripcion</td>
-<td><input type="text" name="descrip"></td>
+<td><input type="text" name="descripcion"></td>
 </tr>
 
 <tr>
